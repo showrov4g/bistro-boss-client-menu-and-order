@@ -2,9 +2,12 @@ import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Context/AuthProvide";
 import Swal from "sweetalert2";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import UseAxiosPublic from "../../hooks/UseAxiosPublic";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 const SignUp = () => {
+  const axiosPublic = UseAxiosPublic();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -23,16 +26,23 @@ const SignUp = () => {
         console.log(result);
         updateUserProfile(data.name, data.photoUrl)
           .then(() => {
-            
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "User update Successfully",
-              showConfirmButton: false,
-              timer: 1500,
+            const userInfo = {
+              name: data.name,
+              email: data.email,
+            };
+            axiosPublic.post("/users", userInfo).then((res) => {
+              if (res.data.insertedId) {
+                Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: "User update Successfully",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                reset();
+                navigate(from, { replace: true });
+              }
             });
-            reset();
-            navigate(from, { replace: true });
           })
           .catch((err) =>
             Swal.fire({
@@ -139,6 +149,18 @@ const SignUp = () => {
               <button className="btn btn-primary">Sign Up</button>
             </div>
           </form>
+
+          <p className="px-6">
+            If you don't have any account please{" "}
+            <Link to={"/login"} className="text-green-700">
+              Register Now
+            </Link>{" "}
+          </p>
+          {/* ================= */}
+          <div>
+            <SocialLogin></SocialLogin>
+          </div>
+          {/* ============= */}
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ import {
 import { AuthContext } from "../../Context/AuthProvide";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 const Login = () => {
   const [disable, setDisable] = useState(true);
@@ -32,15 +33,17 @@ const Login = () => {
           icon: "success",
           title: "Login Successfully",
           showConfirmButton: false,
-          timer: 1500
+          timer: 1500,
         });
       })
-      .catch((err) => Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: err.message,
-        footer: '<a href="#">Why do I have this issue?</a>'
-      }));
+      .catch((err) =>
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: err.message,
+          footer: '<a href="#">Why do I have this issue?</a>',
+        })
+      );
   };
   const handleValidatedCaptcha = (e) => {
     const user_captcha_value = e.target.value;
@@ -116,12 +119,15 @@ const Login = () => {
               />
             </div>
           </form>
-          <p>
+          <p className="px-6">
             If you don't have any account please{" "}
             <Link to={"/signIn"} className="text-green-700">
               Register Now
             </Link>{" "}
           </p>
+          <div>
+            <SocialLogin></SocialLogin>
+          </div>
         </div>
       </div>
     </div>

@@ -6,9 +6,10 @@ import { FcContacts } from "react-icons/fc";
 import { MdReviews } from "react-icons/md";
 import { SiShopee } from "react-icons/si";
 import { NavLink, Outlet } from "react-router-dom";
+import useAdmin from "../hooks/useAdmin";
 
 const Dashboard = () => {
-  const isAdmin = true;
+  const isAdmin = useAdmin();
   return (
     <div className="flex">
       <div className="w-64 min-h-full bg-orange-400">

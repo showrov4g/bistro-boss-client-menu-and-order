@@ -65,12 +65,14 @@ const CheckOutForm = () => {
         const payment ={
           email: user.email,
           name: user.displayName,
+          transactionId: paymentIntent.id,
           price: totalPrice,
           date: new Date(), //utc date convert
-          cartID: cart?.map(item=>item._id),
-          menuItemID: cart?.map(item=>item.menuId),
-          
+          cartIDs: cart?.map(item=>item._id),
+          menuItemIDs: cart?.map(item=>item.menuId),
         }
+        const res = await axiosSecure.post('/payments', payment)
+        console.log("payment saved",res.data);
       }
      }
 

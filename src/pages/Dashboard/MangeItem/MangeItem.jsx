@@ -3,9 +3,12 @@ import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 import useMenu from "../../../hooks/useMenu";
 import { FaDeleteLeft } from "react-icons/fa6";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { Link } from "react-router-dom";
 
 const MangeItem = () => {
   const [menu] = useMenu();
+  const axiosSecure = useAxiosSecure();
   const handleDeleteItem = (item) => {
     Swal.fire({
       title: "Are you sure?",
@@ -15,14 +18,17 @@ const MangeItem = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        
-        // Swal.fire({
-        //   title: "Deleted!",
-        //   text: "Your file has been deleted.",
-        //   icon: "success",
-        // });
+        const res = await axiosSecure.delete(`/menu/${item._id}`);
+        console.log(res.data);
+        if (res.data.deletedCount > 0) {
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success",
+          });
+        }
       }
     });
   };
@@ -68,9 +74,9 @@ const MangeItem = () => {
                   <td>{item.name}</td>
                   <td>{item.price}</td>
                   <td>
-                    <button className="btn btn-ghost btn-xs">
+                    <Link to={`/dashboard/updateItems/${item._id}`}><button className="btn btn-ghost btn-xs">
                       <FaEdit></FaEdit> Update
-                    </button>
+                    </button></Link>
                   </td>
                   <td>
                     <button

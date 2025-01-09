@@ -12,13 +12,14 @@ const SocialLogin = () => {
   const handleGoogleLogin = () => {
     googleLogin()
     .then(res=>{
+      navigate('/')
         const userInfo = {
             name: res.user?.displayName,
             email : res.user?.email
         }
         axiosPublic.post("/users", userInfo)
         .then(res=>{
-            navigate("/")
+            
             Swal.fire({
                 position: "top-end",
                 icon: "error",
@@ -26,6 +27,7 @@ const SocialLogin = () => {
                 showConfirmButton: false,
                 timer: 2500
               });
+              
         })
     })
   };
